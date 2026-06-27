@@ -592,17 +592,90 @@ ul.bl li::before {
 .ot { font-size: 0.9rem; font-weight: 600; color: var(--c-text); margin-bottom: 3px; }
 .od { font-size: 0.83rem; color: var(--c-dim); line-height: 1.5; }
 
+/* ── MOBILE TOPBAR ── */
+.mob-top {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 52px;
+  background: var(--navy);
+  border-bottom: 2px solid var(--red);
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 200;
+}
+.mob-brand {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--white);
+}
+.mob-brand span { color: var(--red); }
+.mob-menu-btn {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid var(--border-dk);
+  color: var(--white);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 7px 13px;
+  border-radius: 5px;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+}
+.mob-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 99;
+}
+.mob-backdrop.open { display: block; }
+
 @media (max-width: 680px) {
-  .sidebar { width: 100%; min-height: auto; position: relative; }
-  .main { margin-left: 0; }
-  .panel { padding: 24px 18px 60px; }
+  body { flex-direction: column; }
+
+  .mob-top { display: flex; }
+
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: 270px;
+    height: 100vh;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    z-index: 150;
+    min-height: unset;
+  }
+  .sidebar.open { transform: translateX(0); }
+
+  .main { margin-left: 0; padding-top: 52px; }
+
+  .panel { padding: 24px 16px 60px; }
+
+  h1 { font-size: 1.6rem; }
+  h2 { font-size: 1.05rem; }
+
   .tg { grid-template-columns: 1fr; }
   .sg { grid-template-columns: repeat(2, 1fr); }
-  body { flex-direction: column; }
+
+  .script { font-size: 0.84rem; padding: 12px 14px; }
+
+  .etpl { font-size: 0.72rem; padding: 14px 14px; }
+
+  .col-h { font-size: 0.82rem; }
 }
 </style>
 </head>
 <body>
+
+<div class="mob-top">
+  <div class="mob-brand">DEALER<span>KEY</span></div>
+  <button class="mob-menu-btn" onclick="toggleSidebar()">☰ Menu</button>
+</div>
+<div class="mob-backdrop" onclick="toggleSidebar()"></div>
 
 <nav class="sidebar">
   <div class="sb-logo">
@@ -998,6 +1071,14 @@ function show(id,el){
   document.getElementById(id).classList.add('active');
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
   if(el)el.classList.add('active');
+  if(window.innerWidth<=680){
+    document.querySelector('.sidebar').classList.remove('open');
+    document.querySelector('.mob-backdrop').classList.remove('open');
+  }
+}
+function toggleSidebar(){
+  document.querySelector('.sidebar').classList.toggle('open');
+  document.querySelector('.mob-backdrop').classList.toggle('open');
 }
 function tc(h){
   h.classList.toggle('open');
