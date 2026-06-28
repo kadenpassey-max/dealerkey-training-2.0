@@ -1100,6 +1100,22 @@ load();
   injectHeroBanners();
   initProgressBar();
   initCheckboxes();
+
+     // Fix UTF-8 encoding artifacts in text content
+     (function fixEncoding(node) {
+            if (node.nodeType === 3) {
+                     node.textContent = node.textContent
+                       .replace(/\u00E2\u0080\u0094/g, '\u2014')
+                       .replace(/\u00E2\u0080\u0093/g, '\u2013')
+                       .replace(/\u00E2\u0080\u0099/g, '\u2019')
+                       .replace(/\u00E2\u0080\u0098/g, '\u2018')
+                       .replace(/\u00E2\u0080\u009C/g, '\u201C')
+                       .replace(/\u00E2\u0080\u009D/g, '\u201D')
+                       .replace(/\u00E2\u0080\u00A6/g, '\u2026');
+            } else if (node.nodeType === 1) {
+                     for (const c of node.childNodes) fixEncoding(c);
+            }
+     })(document.body);
 </script>
 </body>
 </html>
